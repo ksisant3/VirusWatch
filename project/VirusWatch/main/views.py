@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import ToDoList, Item
 from django.contrib.auth import authenticate, login
+from .upload import upload_file
 
 
 # Create your views here.
@@ -16,3 +17,15 @@ def home(response):
 def create(response):
     return render(response, "main/create.html", {})
 
+def upload(response):
+    if response.method == 'POST':
+        if upload_file(response):
+            return HttpResponse("<h1>file uploaded successfully</h1>")
+        else:
+            return HttpResponse("<h1>file uploaded failed</h1>") 
+
+    return render(response, "main/upload.html")
+
+def view_uploads(response):
+    print(response.session.items())
+    return render(response, "main/view-uploads.html", {})
