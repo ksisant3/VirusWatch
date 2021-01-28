@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from .models import ToDoList, Item
 from django.contrib.auth import authenticate, login
 from .upload import upload_file
+from .download import get_files
 
 
 # Create your views here.
@@ -27,5 +28,4 @@ def upload(response):
     return render(response, "main/upload.html")
 
 def view_uploads(response):
-    print(response.session.items())
-    return render(response, "main/view-uploads.html", {})
+    return render(response, "main/view-uploads.html", get_files())
