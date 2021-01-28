@@ -7,6 +7,18 @@ from django.contrib.auth.password_validation import validate_password, Validatio
 def register(response):
     if response.method == "POST":
         form = RegisterForm(response.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("/thanks")
+    else:
+        form = RegisterForm()
+
+    return render(response, "register/register.html", {"form":form})
+
+
+""" def register(response):
+    if response.method == "POST":
+        form = RegisterForm(response.POST)
         print(response.POST)
         try:
             validate_password(response.POST.get("password2"))
@@ -18,4 +30,4 @@ def register(response):
                 return render(response, "register/register.html", {"form": form})
         
         except ValidationError as e:
-            print(str(e))
+            print(str(e)) """

@@ -16,3 +16,6 @@ def home(response):
 def create(response):
     return render(response, "main/create.html", {})
 
+def thanks(response):
+    return render(response, "main/thanks.html", {})
+
