@@ -6,7 +6,14 @@ excel_file = 'D:\Data analyzation folder\Excell_data_files\2019 nCoV wastewater 
 
 data = pd.read_excel(excel_file, sheet_name='sheet1')
 
-selectedData = data.groupby[
+selectedData = data.groupby(['Sample Name', 'Target Name', 'CT', 'CT Mean'])
+
+selectedData.plot(xlabel = 'Target_Mean', ylabel = 'Particle_Density')
+
+print(selectedData)
+
+plot.xticks(np.arange(0, x_max, 250), rotation=45)
+plot.show()
 
 
 #####################################################################################################
