@@ -18,6 +18,9 @@ def home(response):
 def create(response):
     return render(response, "main/create.html", {})
 
+def thanks(response):
+    return render(response, "main/thanks.html", {})
+
 def upload(response):
     if response.method == 'POST':
         if upload_file(response):
