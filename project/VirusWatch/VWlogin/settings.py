@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 
+from django.urls.base import reverse
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -134,5 +136,7 @@ STATIC_URL = '/static/'
 
 CRISPY_TEMPLATE_PACK="bootstrap4"
 
-LOGIN_REDIRECT_URL = "/home"
+from django.urls import reverse_lazy
+LOGIN_URL = reverse_lazy('login_user')
+LOGIN_REDIRECT_URL = "/dashboard"
 LOGOUT_REDIRECT_URL = "/home"
