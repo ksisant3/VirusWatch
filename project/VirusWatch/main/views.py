@@ -4,7 +4,7 @@ from .models import ToDoList, Item
 from django.contrib.auth import authenticate, login
 from .upload import upload_file
 from .download import get_files
-
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -15,12 +15,10 @@ def index(response, id):
 def home(response):
     return render(response, "main/home.html", {})
 
-def create(response):
-    return render(response, "main/create.html", {})
-
 def thanks(response):
     return render(response, "main/thanks.html", {})
 
+@login_required()
 def upload(response):
     if response.method == 'POST':
         if upload_file(response):
@@ -30,5 +28,6 @@ def upload(response):
 
     return render(response, "main/upload.html")
 
+@login_required()
 def view_uploads(response):
     return render(response, "main/view-uploads.html", get_files())

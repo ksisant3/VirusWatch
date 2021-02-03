@@ -3,10 +3,10 @@
 {% block content %}
 {#  top navbar  #}
     <nav class="navbar navbar-light fixed-top flex-md-nowrap p-0 shadow">
-      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/home" style="color: white">VirusWatch</a>
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#" style="color: white">VirusWatch</a>
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-          <a class="nav-link" href="/logout" style="color: white">Sign out</a>
+          <a class="nav-link" href="/home" style="color: white">Sign out</a>
         </li>
       </ul>
     </nav>
@@ -61,17 +61,9 @@
 {#  end of sidenavbar    #}
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4"><div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h2>Upload</h2>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input type="file" name="document">
-            <button type="submit">Upload file</button>
-        </form>
+        <h1 class="h2">Dashboard</h1>
       </div>
     </main>
   </div>
 </div>
 {% endblock %}
-
-
-
