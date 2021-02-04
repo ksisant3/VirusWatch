@@ -1,19 +1,22 @@
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plot
 
-excel_file = 'D:\Data analyzation folder\Excell_data_files\2019 nCoV wastewater 07152020_results_AlteredForCapstone.xlsx'
+excel_file = 'D:\School_class_folders\Capstone\Data\\2019 nCoV wastewater 07222020_results_AlteredForCapstone.xlsx'
 
-data = pd.read_excel(excel_file, sheet_name='sheet1')
+data = pd.read_excel(excel_file, sheet_name='Results')
 
-selectedData = data.groupby(['Sample Name', 'Target Name', 'CT', 'CT Mean'])
+selectedData = data.loc[:, ['Sample Name', 'Target Name', 'CT', 'Ct Mean']]
 
-selectedData.plot(xlabel = 'Target_Mean', ylabel = 'Particle_Density')
+plotData = selectedData.loc[:, ['CT', 'Ct Mean']]
+
+plotData.plot(xlabel = 'Particle_Density', ylabel = 'Target_Mean')
 
 print(selectedData)
-
-plot.xticks(np.arange(0, x_max, 250), rotation=45)
 plot.show()
+
+#plot.xticks(np.arange(0, x_max, 250), rotation=45)
+#plot.show()
 
 
 #####################################################################################################
