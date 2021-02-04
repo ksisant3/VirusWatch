@@ -1,66 +1,57 @@
-from .forms import UploadFileForm
 from django.core.files.storage import FileSystemStorage
-import pandas as pd
-from sqlalchemy import create_engine
-import tkinter as tk
 import os
 from datetime import datetime
 import mysql.connector
+from .database import Database
 
-
-USERNAME = 'admin'
-PASSWORD = 'viruswatch'
-SERVER = 'test-db.ctvd1ztjykvr.us-east-1.rds.amazonaws.com:3306'
-DATABASE = 'Test_DB'
-
+# ASSUMES REQUEST HAS VALID FORM
+# RETURNS TRUE ON SUCCESS
 def upload_file(request):
 
-    form = UploadFileForm(request.POST, request.FILES)
-    if form.is_valid() and handle_uploaded_file(request.FILES['document']):
-        add_filename(request.FILES['document'].name)
-        return True
-    return False
+    fileSystem = FileSystemStorage()
+    file = request.FILES['document']
 
-def add_filename(filename):
-    mydb = mysql.connector.connect(
-        host="test-db.ctvd1ztjykvr.us-east-1.rds.amazonaws.com",
-        user=USERNAME,
-        password=PASSWORD,
-        database=DATABASE
-    )
+    # GET GROUP NAME AND ID
+    # (HARDCODED FOR NOW)
+    groupID = 1
+    groupName = 'TEMP GROUP'
 
-    mycursor = mydb.cursor()
+    groupPath = os.path.join(fileSystem.location, groupName)
 
-    sql= "INSERT INTO user_file(file_name) VALUES('" + filename + "');"
-    val = (filename)
-    print(sql)
-    mycursor.execute(sql)
+    # CHECK IF GROUP FOLDER DOESN'T EXIST
+    if not os.path.exists(groupPath):
 
-    mydb.commit()
-    mycursor.close()
+        # CREATE IT
+        os.makedirs(groupPath)
 
-def handle_uploaded_file(file):
-    
-    try: 
-        fileSystem = FileSystemStorage()
-        fileSystem.save(file.name, file)
+    filePath = os.path.join(groupPath, file.name)
 
-        root = tk.Tk()
-        root.withdraw()
+    # SAVE FILE TO GROUP FOLDER
+    # IF FILE IS DUPLICATE, FILEPATH 
+    # IS UPDATED TO NEW FILE PATH
+    filePath = fileSystem.save(filePath, file)
 
-        file_path = os.path.join(fileSystem.location, file.name)
+    # OPEN DB CONNECTION
+    conn = Database.open_db_conn()
 
-        engine = create_engine('mysql+mysqldb://'+ USERNAME +':'+PASSWORD+'@'+SERVER+'/'+DATABASE)
+    # SAVE FILE PATH, UPLOAD DATE, UPLOADER NAME TO USER_FILE
+    cursor = conn.cursor()
 
-        dataframe = pd.read_excel(file_path)
+    # SQL
+    sql = """ INSERT INTO user_file
+              (file_name, user_id, group_id) 
+              VALUES
+              (%s,%s,%s);
+          """
 
-        table_name = datetime.now().strftime("%H:%M:%S") + '_' + file.name
+    # EXCECUTE SQL AND COMMIT CHANGES
+    cursor.execute(sql, (file.name, request.user.id, groupID))
+    conn.commit()
 
-        dataframe.to_sql(table_name, con=engine)
+    # CLOSE CONNECITON
+    cursor.close()
+    conn.close()
 
-        fileSystem.delete(file.name)
+    # RETURN TRUE
+    return True
 
-        return True
-
-    except:
-        return False

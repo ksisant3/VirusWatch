@@ -1,18 +1,9 @@
 import mysql.connector
-
-USERNAME = 'admin'
-PASSWORD = 'viruswatch'
-SERVER = 'test-db.ctvd1ztjykvr.us-east-1.rds.amazonaws.com'
-DATABASE = 'Test_DB'
+from .database import Database
 
 def get_files():
-    mydb = mysql.connector.connect(
-        host=SERVER,
-        user=USERNAME,
-        password=PASSWORD,
-        database=DATABASE
-    )
-    cursor = mydb.cursor()
+    conn = Database.open_db_conn()
+    cursor = conn.cursor()
 
     cursor.execute("SELECT file_name FROM user_file")
 
@@ -22,5 +13,8 @@ def get_files():
 
     for filename in filenames:
         outList.add(filename)
+
+    conn.close()
+    cursor.close()
 
     return {'files': outList}
