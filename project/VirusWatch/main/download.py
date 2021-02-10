@@ -1,20 +1,21 @@
 import mysql.connector
 from .database import Database
 
-def get_files():
-    conn = Database.open_db_conn()
-    cursor = conn.cursor()
+def get_files(userID):
+    db = Database()
 
-    cursor.execute("SELECT file_name FROM user_file")
+    sql = """SELECT file_name
+             FROM user_file 
+             WHERE user_id= %s"
+    """
 
-    filenames = cursor.fetchall()
+    filenames = db.excecute_sql_select(sql,(str(userID),))
 
-    outList = set()
+    outList = []
 
     for filename in filenames:
-        outList.add(filename)
+        outList.append(filename)
 
-    conn.close()
-    cursor.close()
+    print(type(outList[0]))
 
     return {'files': outList}

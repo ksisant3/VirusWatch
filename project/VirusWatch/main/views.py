@@ -34,4 +34,4 @@ def upload(response):
 
 @login_required()
 def view_uploads(response):
-    return render(response, "main/view-uploads.html", get_files())
+    return render(response, "main/view-uploads.html", get_files(response.user.id))

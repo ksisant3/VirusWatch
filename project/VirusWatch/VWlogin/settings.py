@@ -83,13 +83,9 @@ DATABASES = {
 # MYSQL DB
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Test_DB',
-        'USER': 'admin',
-        'PASSWORD': 'viruswatch',
-        'HOST': 'test-db.ctvd1ztjykvr.us-east-1.rds.amazonaws.com',
-        'PORT': '3306',
         'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'read_default_file': 'dbconfig.cnf',
         }
     }
 }
