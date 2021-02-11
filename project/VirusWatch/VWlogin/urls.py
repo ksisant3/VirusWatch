@@ -16,10 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from register import views
+import main
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("main.urls")),
     path('', include("django.contrib.auth.urls")),
     path('', include('register.urls')),
+    path('download/<str:file_name>/', main.views.download),
 ]

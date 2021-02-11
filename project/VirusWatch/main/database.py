@@ -21,7 +21,7 @@ class Database:
         self.conn.close()
 
     def excecute_sql_select(self, sql_string, tupl = None):
-        cursor = self.conn.cursor()
+        cursor = self.conn.cursor( buffered=True )
 
         if tupl is None:
             cursor.execute(sql_string)
@@ -33,7 +33,7 @@ class Database:
         output = []
 
         while row is not None:
-            output.append(row)
+            output.append(row[0])
             row = cursor.fetchone()
 
         cursor.close()

@@ -6,8 +6,8 @@ def get_files(userID):
 
     sql = """SELECT file_name
              FROM user_file 
-             WHERE user_id= %s"
-    """
+             WHERE user_id= %s
+          """
 
     filenames = db.excecute_sql_select(sql,(str(userID),))
 
@@ -19,3 +19,4 @@ def get_files(userID):
     print(type(outList[0]))
 
     return {'files': outList}
+
