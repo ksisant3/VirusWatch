@@ -1,8 +1,9 @@
 asgiref==3.3.1
 Django==3.1.5
 django-crispy-forms==1.10.0
-et-xmlfile==1.0.1
+django-extensions==3.1.0
 future==0.18.2
+graphviz==0.16
 jdcal==1.4.1
 mysql==0.0.2
 mysql-connector-python==8.0.23
@@ -11,6 +12,8 @@ numpy==1.19.5
 openpyxl==3.0.6
 pandas==1.2.0
 protobuf==3.14.0
+pydotplus==2.0.2
+pyparsing==2.4.7
 python-dateutil==2.8.1
 pytz==2020.5
 six==1.15.0

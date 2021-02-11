@@ -1,66 +1,74 @@
-from .forms import UploadFileForm
 from django.core.files.storage import FileSystemStorage
-import pandas as pd
-from sqlalchemy import create_engine
-import tkinter as tk
-import os
+#import os
+from os import path, makedirs
 from datetime import datetime
 import mysql.connector
+from .database import Database
 
-
-USERNAME = 'admin'
-PASSWORD = 'viruswatch'
-SERVER = 'test-db.ctvd1ztjykvr.us-east-1.rds.amazonaws.com:3306'
-DATABASE = 'Test_DB'
-
+# ASSUMES REQUEST HAS VALID FORM
+# RETURNS TRUE ON SUCCESS
 def upload_file(request):
 
-    form = UploadFileForm(request.POST, request.FILES)
-    if form.is_valid() and handle_uploaded_file(request.FILES['document']):
-        add_filename(request.FILES['document'].name)
-        return True
-    return False
+    fileSystem = FileSystemStorage()
+    file = request.FILES['document']
+    fileName = file.name
 
-def add_filename(filename):
-    mydb = mysql.connector.connect(
-        host="test-db.ctvd1ztjykvr.us-east-1.rds.amazonaws.com",
-        user=USERNAME,
-        password=PASSWORD,
-        database=DATABASE
-    )
+    # GET GROUP NAME AND ID
+    # (HARDCODED FOR NOW)
+    groupID = 1
+    groupName = 'TEMP GROUP'
 
-    mycursor = mydb.cursor()
+    appFileDir = path.join(fileSystem.location,'files')
 
-    sql= "INSERT INTO user_file(file_name) VALUES('" + filename + "');"
-    val = (filename)
-    print(sql)
-    mycursor.execute(sql)
+    groupDir = path.join(appFileDir, groupName)
 
-    mydb.commit()
-    mycursor.close()
+    # CHECK IF GROUP FOLDER DOESN'T EXIST
+    if not path.exists(groupDir):
 
-def handle_uploaded_file(file):
-    
-    try: 
-        fileSystem = FileSystemStorage()
-        fileSystem.save(file.name, file)
+        makedirs(groupDir)
 
-        root = tk.Tk()
-        root.withdraw()
+    if path.exists(path.join(groupDir,fileName)):
 
-        file_path = os.path.join(fileSystem.location, file.name)
+        fileName = find_unique_filename(fileName, groupDir)
 
-        engine = create_engine('mysql+mysqldb://'+ USERNAME +':'+PASSWORD+'@'+SERVER+'/'+DATABASE)
+    fileDir = path.join(groupDir, fileName)
 
-        dataframe = pd.read_excel(file_path)
+    # SAVE FILE TO GROUP FOLDER
+    # IF FILE IS DUPLICATE, FILEPATH 
+    # IS UPDATED TO NEW FILE PATH
+    fileSystem.save(fileDir, file)
 
-        table_name = datetime.now().strftime("%H:%M:%S") + '_' + file.name
+    # OPEN DB CONNECTION
+    db = Database()
 
-        dataframe.to_sql(table_name, con=engine)
+    # SAVE FILE PATH, UPLOAD DATE, UPLOADER NAME TO USER_FILE
+    sql = """ INSERT INTO user_file
+              (file_name, user_id, group_id) 
+              VALUES
+              (%s,%s,%s);
+          """
 
-        fileSystem.delete(file.name)
+    # EXCECUTE SQL AND COMMIT CHANGES
+    db.excecute_sql_insert(sql, (fileName, request.user.id, groupID))
 
-        return True
+    # RETURN TRUE
+    return True
 
-    except:
-        return False
+def find_unique_filename(fileName,directory):
+    count = 1
+    if fileName[-4:-3] == '.':
+        while path.exists(path.join(directory,fileName[:-4] + 
+                         '(' + str(count) + ')' + fileName[-4:])):
+            count+=1
+
+        return fileName[:-4] + '(' + str(count) + ')' + fileName[-4:]
+
+    elif fileName[-5:-4] == '.':
+        while path.exists(path.join(directory,fileName[:-5] +
+                         '(' + str(count) + ')' + fileName[-5:])):
+            count+=1
+
+        return fileName[:-5] + '(' + str(count) + ')' + fileName[-5:]
+
+    else:
+        raise Exception("excel file name not valid")
