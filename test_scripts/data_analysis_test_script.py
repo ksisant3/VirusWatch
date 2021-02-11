@@ -6,17 +6,37 @@ excel_file = 'D:\School_class_folders\Capstone\Data\\2019 nCoV wastewater 072220
 
 data = pd.read_excel(excel_file, sheet_name='Results')
 
-selectedData = data.loc[:, ['Sample Name', 'Target Name', 'CT', 'Ct Mean']]
+data['Particle_Density'] = "N/A"
 
-plotData = selectedData.loc[:, ['CT', 'Ct Mean']]
+# grouped_data = data.groupby(["Sample Name", "Target Name"])
 
-plotData.plot(xlabel = 'Particle_Density', ylabel = 'Target_Mean')
+# for name, group in grouped_data:
+#     print("Group name: ", name)
+#     print('-' * 27)
+#     group.loc[group["Sample Name"] == "PTC 1:10", "Particle_Density"] = 20000
+#     group.loc[group["Sample Name"] == "PTC 1:100", "Particle_Density"] = 2000
+#     group.loc[group["Sample Name"] == "PTC 1:1000", "Particle_Density"] = 200
+#     print(group, end="\n\n")
 
-print(selectedData)
+# grouped_data = grouped_data.concat(["Sample Name", "Target Name"])
+
+# print(grouped_data)
+
+selectedData = data.loc[:, ['Sample Name', 'Target Name', 'CT', 'Ct Mean', 'Particle_Density']]
+
+selectedData.loc[selectedData["Sample Name"] == "PTC 1:10", "Particle_Density"] = 20000
+selectedData.loc[selectedData["Sample Name"] == "PTC 1:100", "Particle_Density"] = 2000
+selectedData.loc[selectedData["Sample Name"] == "PTC 1:1000", "Particle_Density"] = 200
+
+N1plotData = selectedData.loc[selectedData["Target Name"] == "N1", ['Ct Mean', 'Particle_Density']]
+N2plotData = selectedData.loc[selectedData["Target Name"] == "N2", ['Ct Mean', 'Particle_Density']]
+
+N1plotData.plot()
+plot.show()
+N2plotData.plot()
 plot.show()
 
-#plot.xticks(np.arange(0, x_max, 250), rotation=45)
-#plot.show()
+print(selectedData)
 
 
 #####################################################################################################
