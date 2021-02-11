@@ -10,6 +10,8 @@ from django.core.files.storage import FileSystemStorage
 from django.http import FileResponse
 from django.conf import settings
 import mimetypes
+from django.contrib import messages
+
 
 # Create your views here.
 
@@ -31,8 +33,9 @@ def upload(response):
 
         File(name=response.FILES['document'].name,file=response.FILES['document'],
              user=response.user).save()
-        return HttpResponse("<h1>file uploaded successfully</h1>")
 
+        messages.info(response, 'Your file has been uploaded successfully!')
+        
     return render(response, "main/upload.html")
 
 @login_required()
@@ -43,11 +46,23 @@ def view_uploads(response):
 
 
 
-def download(request,file_name):
-    f = File.objects.get(user = request.user.id, name = file_name )
-    response = HttpResponse(f.file.open(mode='rb'))
-    file_mimetype = mimetypes.guess_type(f.file.name)
+def download( request, file_id ):
+
+    # todo: check if user is logged in
+    #       and has permissions
+
+    # get file model with id
+    file_model = File.objects.get( id = file_id )
+
+    response = HttpResponse( file_model.file.open(mode='rb') )
+
+    file_mimetype = mimetypes.guess_type( file_model.file.name )
+
     response['Content-Type'] = file_mimetype
-    response['Content-Disposition'] = 'attachment; filename=' + file_name
-    response['X-Sendfile'] = file_name
+
+    response['Content-Disposition'] = 'attachment; filename=' + \
+                                      file_model.file.name
+
+    response['X-Sendfile'] = file_model.file.name
+
     return response

@@ -23,5 +23,4 @@ urlpatterns = [
     path('', include("main.urls")),
     path('', include("django.contrib.auth.urls")),
     path('', include('register.urls')),
-    path('download/<str:file_name>/', main.views.download),
 ]
