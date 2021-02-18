@@ -25,6 +25,10 @@ def home(response):
 def thanks(response):
     return render(response, "main/thanks.html", {})
 
+
+def analysis(response):
+    return render(response, "main/analysis.html", {})
+
 @login_required()
 def upload(response):
 
