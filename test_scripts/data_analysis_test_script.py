@@ -6,7 +6,10 @@ excel_file = 'D:\School_class_folders\Capstone\Data\\2019 nCoV wastewater 072220
 
 data = pd.read_excel(excel_file, sheet_name='Results')
 
-data['Particle_Density'] = "N/A"
+# New column Particle density
+data['Particle_Density'] = np.nan
+
+###########################################GroupData section#########################
 
 # grouped_data = data.groupby(["Sample Name", "Target Name"])
 
@@ -18,9 +21,13 @@ data['Particle_Density'] = "N/A"
 #     group.loc[group["Sample Name"] == "PTC 1:1000", "Particle_Density"] = 200
 #     print(group, end="\n\n")
 
+
+# # Non-functional groupBy concatanation experiment to merge without aggregation methods
 # grouped_data = grouped_data.concat(["Sample Name", "Target Name"])
 
 # print(grouped_data)
+
+########################################Selected Data section for monolithic manipulation experimentation#####################################
 
 selectedData = data.loc[:, ['Sample Name', 'Target Name', 'CT', 'Ct Mean', 'Particle_Density']]
 
@@ -31,12 +38,15 @@ selectedData.loc[selectedData["Sample Name"] == "PTC 1:1000", "Particle_Density"
 N1plotData = selectedData.loc[selectedData["Target Name"] == "N1", ['Ct Mean', 'Particle_Density']]
 N2plotData = selectedData.loc[selectedData["Target Name"] == "N2", ['Ct Mean', 'Particle_Density']]
 
-N1plotData.plot()
+#N1plotData = N1plotData.dropna(subset=["Ct Mean", "Particle_Density"])
+N1plotData.plot(x="Particle_Density", y="Ct Mean")
 plot.show()
-N2plotData.plot()
+N2plotData.plot(x="Particle_Density", y="Ct Mean")
 plot.show()
 
-print(selectedData)
+#df.dropna(subset=['ShiftedPrice']).plot(x='date', y='ShiftedPrice')
+
+print(N1plotData)
 
 
 #####################################################################################################
