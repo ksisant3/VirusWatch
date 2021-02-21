@@ -1,19 +1,52 @@
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plot
 
-excel_file = 'D:\Data analyzation folder\Excell_data_files\2019 nCoV wastewater 07152020_results_AlteredForCapstone.xlsx'
+excel_file = 'D:\School_class_folders\Capstone\Data\\2019 nCoV wastewater 07222020_results_AlteredForCapstone.xlsx'
 
-data = pd.read_excel(excel_file, sheet_name='sheet1')
+data = pd.read_excel(excel_file, sheet_name='Results')
 
-selectedData = data.groupby(['Sample Name', 'Target Name', 'CT', 'CT Mean'])
+# New column Particle density
+data['Particle_Density'] = np.nan
 
-selectedData.plot(xlabel = 'Target_Mean', ylabel = 'Particle_Density')
+###########################################GroupData section#########################
 
-print(selectedData)
+# grouped_data = data.groupby(["Sample Name", "Target Name"])
 
-plot.xticks(np.arange(0, x_max, 250), rotation=45)
+# for name, group in grouped_data:
+#     print("Group name: ", name)
+#     print('-' * 27)
+#     group.loc[group["Sample Name"] == "PTC 1:10", "Particle_Density"] = 20000
+#     group.loc[group["Sample Name"] == "PTC 1:100", "Particle_Density"] = 2000
+#     group.loc[group["Sample Name"] == "PTC 1:1000", "Particle_Density"] = 200
+#     print(group, end="\n\n")
+
+
+# # Non-functional groupBy concatanation experiment to merge without aggregation methods
+# grouped_data = grouped_data.concat(["Sample Name", "Target Name"])
+
+# print(grouped_data)
+
+########################################Selected Data section for monolithic manipulation experimentation#####################################
+
+selectedData = data.loc[:, ['Sample Name', 'Target Name', 'CT', 'Ct Mean', 'Particle_Density']]
+
+selectedData.loc[selectedData["Sample Name"] == "PTC 1:10", "Particle_Density"] = 20000
+selectedData.loc[selectedData["Sample Name"] == "PTC 1:100", "Particle_Density"] = 2000
+selectedData.loc[selectedData["Sample Name"] == "PTC 1:1000", "Particle_Density"] = 200
+
+N1plotData = selectedData.loc[selectedData["Target Name"] == "N1", ['Ct Mean', 'Particle_Density']]
+N2plotData = selectedData.loc[selectedData["Target Name"] == "N2", ['Ct Mean', 'Particle_Density']]
+
+#N1plotData = N1plotData.dropna(subset=["Ct Mean", "Particle_Density"])
+N1plotData.plot(x="Particle_Density", y="Ct Mean")
 plot.show()
+N2plotData.plot(x="Particle_Density", y="Ct Mean")
+plot.show()
+
+#df.dropna(subset=['ShiftedPrice']).plot(x='date', y='ShiftedPrice')
+
+print(N1plotData)
 
 
 #####################################################################################################

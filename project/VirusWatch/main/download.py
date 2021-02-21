@@ -1,26 +1,22 @@
 import mysql.connector
+from .database import Database
 
-USERNAME = 'admin'
-PASSWORD = 'viruswatch'
-SERVER = 'test-db.ctvd1ztjykvr.us-east-1.rds.amazonaws.com'
-DATABASE = 'Test_DB'
+def get_files(userID):
+    db = Database()
 
-def get_files():
-    mydb = mysql.connector.connect(
-        host=SERVER,
-        user=USERNAME,
-        password=PASSWORD,
-        database=DATABASE
-    )
-    cursor = mydb.cursor()
+    sql = """SELECT file_name
+             FROM user_file 
+             WHERE user_id= %s
+          """
 
-    cursor.execute("SELECT file_name FROM user_file")
+    filenames = db.excecute_sql_select(sql,(str(userID),))
 
-    filenames = cursor.fetchall()
-
-    outList = set()
+    outList = []
 
     for filename in filenames:
-        outList.add(filename)
+        outList.append(filename)
+
+    print(type(outList[0]))
 
     return {'files': outList}
+

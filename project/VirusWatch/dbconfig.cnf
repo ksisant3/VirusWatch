@@ -1,0 +1,7 @@
+[client]
+database = Test_DB
+user = admin
+password = viruswatch
+host = test-db.ctvd1ztjykvr.us-east-1.rds.amazonaws.com
+port = 3306
+default-character-set = utf8
