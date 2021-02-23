@@ -4,56 +4,71 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        
-        <style type="text/css">
-            .sidenav {
-                height:100%;
-                width:130px;
-                position: fixed;
-                z-index:1;
-                top:0;
-                left:0;
-                background-color:#111;
-                overflow-x: :hidden;
-                padding-top:20px;
-            }
-     
-            .sidenav a {
-                padding:6px 8px 6px 16px;
-                text-decoration: none;
-                font-size:25px;
-                color: #818181;
-                display:block;
-            }
-     
-            .sidenav a:hover{
-                color:#f1f1f1;
-            }	
-     
-            .main{
-                margin-left:130px;
-                padding: 0px 10px;
-            }
-     
-        </style>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/main.css'%}" />
+        <link rel="icon" type="image/png" href="images/logo-cropped.png" />
         <title>VirusWatch</title>
     </head>
 
     <body>
+        <div class="page-wrap">
+		<nav id="nav">
+			<ul class="links">
+		        <li><a href="/">Home</a></li>	
+                <li><a href="/register">Register</a></li>
+                <li><a href="/login">Login</a></li>
+			</ul>
+		</nav>
 
-        <div class="sidenav">
-            <a href="/">Home</a>
-            <a href="/register">Register</a>
-            <a href="/login">Login</a>
-        </div>
+        <section id="main">
+       
+        <!-- Banner -->
+        <section id="banner">
+            <div class="inner">
+                <h1>Team VirusWatch</h1>
+                <p>Welcome to the landing page of Team VirusWatch</p>
+                <ul class="actions">
+                    <li><a href="#galleries" class="button alt scrolly big">Continue</a></li>
+                </ul>
+            </div>
+        </section>
     
-        <div id="content", name="content", class="main">
-            {% block content %}
-            {% endblock %}
+        <section id="galleries">
+        <div class="gallery">
+            <header class="special">
+                <h2>About</h2>
+            </header>
+            <div class="content">
+                <p>VirusWatch is creating a web application that can host and compare any type of viral surveillance data so that we can determine how far in advance wastewater surveillance can “alert” stakeholders of an upcoming outbreak. Our project is to create a web application for Dr. Crystal Hepp (Assistant Professor at the School of Informatics, Computing, and Cyber Systems). The goal of this project is to create a space that allows for data that is taken from the analysis of wastewater and convert it to a digestable format for agencies to use. This application would be useful as the current processing of information involves the manual delivery of data to respective agencies that can be expidited through a common host site for this information.</p>
+            </div>
+        </div>
+</div>
+
+
+</section>
+        <!-- Footer -->
+        <footer id="footer">
+            <div class="copyright">
+                Team VirusWatch 2021
+            </div>
+        </footer>
+        </section>
         </div>
 
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>  
+        {% load static %}
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        {% load static %}
+        <script src="{% static 'js/jquery.poptrox.min.js' %}"></script>
+        {% load static %}
+        <script src="{% static 'js/jquery.scrolly.min.js' %}"></script>
+        {% load static %}
+        <script src="{% static 'js/skel.min.js' %}"></script>
+        {% load static %}
+        <script src="{% static 'js/util.js' %}"></script>
+        {% load static %}
+        <script src="{% static 'js/main.js' %}"></script>
     </body>
 </html>
